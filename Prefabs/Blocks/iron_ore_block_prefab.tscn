@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://dov4yo2h7tw7d"]
+
+[ext_resource type="PackedScene" uid="uid://f1j1yp33pky1" path="res://Prefabs/basic_block_prefab.tscn" id="1_bfly8"]
+[ext_resource type="Script" uid="uid://bnrxokxs8ssev" path="res://Scripts/Blocks/iron_ore_block_data.gd" id="2_hrn1i"]
+
+[node name="Node2D" instance=ExtResource("1_bfly8")]
+script = ExtResource("2_hrn1i")
+
+[node name="Sprite2D" parent="." index="1"]
+modulate = Color(0.36791876, 0.37548628, 0.33939257, 1)

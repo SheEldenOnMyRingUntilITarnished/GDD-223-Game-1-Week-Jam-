@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://dvqlep33j8rra"]
+
+[ext_resource type="PackedScene" uid="uid://f1j1yp33pky1" path="res://Prefabs/basic_block_prefab.tscn" id="1_2m6vy"]
+[ext_resource type="Script" uid="uid://dlkvedv7y5suh" path="res://Scripts/Blocks/silver_block_data.gd" id="2_7akyt"]
+
+[node name="Node2D" instance=ExtResource("1_2m6vy")]
+modulate = Color(0, 0.7376064, 0.39607188, 1)
+script = ExtResource("2_7akyt")

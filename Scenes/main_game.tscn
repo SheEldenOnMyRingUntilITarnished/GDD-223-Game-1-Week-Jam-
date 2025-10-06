@@ -1,0 +1,39 @@
+[gd_scene load_steps=4 format=3 uid="uid://632ip3qy3hbl"]
+
+[ext_resource type="PackedScene" uid="uid://gi2xish0ma2a" path="res://Scenes/cave_generator.tscn" id="1_l756w"]
+[ext_resource type="PackedScene" uid="uid://un0y14wnyj4r" path="res://Prefabs/Player.tscn" id="2_pu3va"]
+[ext_resource type="Script" uid="uid://xqb3l377u5ld" path="res://Scripts/ValueHolder.gd" id="3_0e3vx"]
+
+[node name="MainGame" type="Node2D"]
+
+[node name="Systems" type="Node" parent="."]
+
+[node name="CaveGenerator" parent="Systems" instance=ExtResource("1_l756w")]
+
+[node name="Player" parent="." instance=ExtResource("2_pu3va")]
+position = Vector2(160, -80)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position = Vector2(0, 3)
+zoom = Vector2(7, 7)
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0, 0, 0, 1)
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="Control"]
+layout_mode = 0
+offset_left = 560.0
+offset_top = 159.0
+offset_right = 600.0
+offset_bottom = 247.0
+theme_override_font_sizes/font_size = 64
+text = "0"
+script = ExtResource("3_0e3vx")
+
+[connection signal="update_money" from="Player" to="Control/Label" method="_on_player_update_money"]

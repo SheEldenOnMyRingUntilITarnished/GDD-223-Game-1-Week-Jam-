@@ -1,0 +1,110 @@
+[gd_scene load_steps=5 format=3 uid="uid://un0y14wnyj4r"]
+
+[ext_resource type="Script" uid="uid://demqhouc7tk3l" path="res://Scripts/player_movement.gd" id="1_kyqiw"]
+[ext_resource type="Texture2D" uid="uid://c8jttlo0kbmcv" path="res://Sprites/PLayerSprites.png" id="1_rpqav"]
+[ext_resource type="Texture2D" uid="uid://1s6o2j7m8tni" path="res://Sprites/a5bbfead133882d0a9f4c14a092c97be9cbbf5a3.png" id="3_b43ah"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qbkls"]
+size = Vector2(5, 7)
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_kyqiw")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.5, 4.5)
+shape = SubResource("RectangleShape2D_qbkls")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_rpqav")
+hframes = 6
+
+[node name="Timers" type="Node2D" parent="."]
+
+[node name="CoyoteTimer" type="Timer" parent="Timers"]
+wait_time = 0.1
+one_shot = true
+
+[node name="JumpBufferTimer" type="Timer" parent="Timers"]
+wait_time = 0.12
+one_shot = true
+
+[node name="MiningCooldown" type="Timer" parent="Timers"]
+wait_time = 2.0
+one_shot = true
+
+[node name="RayCasts" type="Node2D" parent="."]
+
+[node name="Pickaxe" type="Node2D" parent="RayCasts"]
+position = Vector2(-0.5, 4.5)
+
+[node name="Pickaxe_Left" type="RayCast2D" parent="RayCasts/Pickaxe"]
+scale = Vector2(1, 0.5)
+target_position = Vector2(-15, 0)
+
+[node name="Pickaxe_Right" type="RayCast2D" parent="RayCasts/Pickaxe"]
+scale = Vector2(1, 0.5)
+target_position = Vector2(15, 0)
+
+[node name="Pickaxe_Up" type="RayCast2D" parent="RayCasts/Pickaxe"]
+scale = Vector2(0.5, 1)
+target_position = Vector2(0, -15)
+
+[node name="Pickaxe_Down" type="RayCast2D" parent="RayCasts/Pickaxe"]
+scale = Vector2(0.5, 1)
+target_position = Vector2(0, 15)
+
+[node name="Movement" type="Node2D" parent="RayCasts"]
+
+[node name="Left_HeadNudge" type="RayCast2D" parent="RayCasts/Movement"]
+position = Vector2(-3, 1)
+scale = Vector2(0.3, 0.3)
+target_position = Vector2(0, -2)
+hit_from_inside = true
+
+[node name="Left_HeadNudge2" type="RayCast2D" parent="RayCasts/Movement"]
+position = Vector2(-2.5, 1)
+scale = Vector2(0.3, 0.3)
+target_position = Vector2(0, -2)
+hit_from_inside = true
+
+[node name="Right_HeadNudge" type="RayCast2D" parent="RayCasts/Movement"]
+position = Vector2(1.9999995, 1)
+scale = Vector2(0.3, 0.3)
+target_position = Vector2(0, -2)
+hit_from_inside = true
+
+[node name="Right_HeadNudge2" type="RayCast2D" parent="RayCasts/Movement"]
+position = Vector2(1.5, 1)
+scale = Vector2(0.3, 0.3)
+target_position = Vector2(0, -2)
+hit_from_inside = true
+
+[node name="Right_LedgeHop" type="RayCast2D" parent="RayCasts/Movement"]
+position = Vector2(2, 6)
+scale = Vector2(0.3, 0.3)
+target_position = Vector2(2, 0)
+hit_from_inside = true
+
+[node name="Right_LedgeHop2" type="RayCast2D" parent="RayCasts/Movement"]
+position = Vector2(2, 7)
+scale = Vector2(0.3, 0.3)
+target_position = Vector2(2, 0)
+hit_from_inside = true
+
+[node name="Left_LedgeHop" type="RayCast2D" parent="RayCasts/Movement"]
+position = Vector2(-3, 7)
+scale = Vector2(0.3, 0.3)
+target_position = Vector2(-2, 0)
+hit_from_inside = true
+
+[node name="Left_LedgeHop2" type="RayCast2D" parent="RayCasts/Movement"]
+position = Vector2(-3, 6)
+scale = Vector2(0.3, 0.3)
+target_position = Vector2(-2, 0)
+hit_from_inside = true
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(0.5, 4.5)
+scale = Vector2(0.3, 0.3)
+energy = 0.56
+texture = ExtResource("3_b43ah")

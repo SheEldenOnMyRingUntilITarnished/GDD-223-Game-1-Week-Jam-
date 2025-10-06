@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://632ip3qy3hbl"]
+
+[ext_resource type="PackedScene" uid="uid://gi2xish0ma2a" path="res://Scenes/cave_generator.tscn" id="1_l756w"]
+[ext_resource type="PackedScene" uid="uid://un0y14wnyj4r" path="res://Prefabs/Player.tscn" id="2_pu3va"]
+
+[node name="MainGame" type="Node2D"]
+
+[node name="Systems" type="Node" parent="."]
+
+[node name="CaveGenerator" parent="Systems" instance=ExtResource("1_l756w")]
+
+[node name="Player" parent="." instance=ExtResource("2_pu3va")]
+position = Vector2(160, -80)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position = Vector2(0, 3)
+zoom = Vector2(7, 7)
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0, 0, 0, 1)

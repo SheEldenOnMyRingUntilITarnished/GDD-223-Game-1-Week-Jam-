@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://dwx1b3ta82ito"]
+
+[ext_resource type="PackedScene" uid="uid://f1j1yp33pky1" path="res://Prefabs/basic_block_prefab.tscn" id="1_d0pkc"]
+[ext_resource type="Script" uid="uid://f4s1qwnsrc51" path="res://Scripts/Blocks/diamond_data.gd" id="2_kw830"]
+
+[node name="Node2D" instance=ExtResource("1_d0pkc")]
+script = ExtResource("2_kw830")
