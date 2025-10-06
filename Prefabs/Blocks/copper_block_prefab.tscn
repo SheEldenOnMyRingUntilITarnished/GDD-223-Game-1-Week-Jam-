@@ -7,4 +7,4 @@
 script = ExtResource("2_ynwd3")
 
 [node name="Sprite2D" parent="." index="1"]
-modulate = Color(0.78042, 0.3737858, 0.05774741, 1)
+frame = 4

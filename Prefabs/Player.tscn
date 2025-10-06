@@ -29,7 +29,7 @@ wait_time = 0.12
 one_shot = true
 
 [node name="MiningCooldown" type="Timer" parent="Timers"]
-wait_time = 2.0
+wait_time = 0.001
 one_shot = true
 
 [node name="RayCasts" type="Node2D" parent="."]

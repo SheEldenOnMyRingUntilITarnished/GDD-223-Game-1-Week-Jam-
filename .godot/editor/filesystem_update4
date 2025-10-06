@@ -1,0 +1,15 @@
+res://Prefabs/basic_block_prefab.tscn
+res://Prefabs/Blocks/copper_block_prefab.tscn
+res://Prefabs/Blocks/silver_block_prefab.tscn
+res://Prefabs/Blocks/iron_ore_block_prefab.tscn
+res://Prefabs/Blocks/gold_block_prefab.tscn
+res://Prefabs/Blocks/diamond_block.tscn
+res://Prefabs/Blocks/bedrock_block_prefab.tscn
+res://Scripts/Blocks/bedrock_block_data.gd
+res://Prefabs/Blocks/stone_block.tscn
+res://Scripts/cave_generator.gd
+res://Prefabs/Blocks/background_block_prefab.tscn
+res://Scripts/basic_block_data.gd
+res://Scenes/main_game.tscn
+res://Prefabs/Player.tscn
+res://Scripts/player_movement.gd

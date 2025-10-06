@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://f1j1yp33pky1"]
 
 [ext_resource type="Script" uid="uid://0kfitqqlx0wb" path="res://Scripts/basic_block_data.gd" id="1_u0fvb"]
-[ext_resource type="Texture2D" uid="uid://4q335xxs2p" path="res://icon.svg" id="2_kq6kh"]
+[ext_resource type="Texture2D" uid="uid://cayylhm77epw2" path="res://Block Sprites.png" id="2_kq6kh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_r7mca"]
 size = Vector2(10, 10)
@@ -13,5 +13,7 @@ script = ExtResource("1_u0fvb")
 shape = SubResource("RectangleShape2D_r7mca")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.078, 0.078)
+scale = Vector2(1.25, 1.25)
 texture = ExtResource("2_kq6kh")
+hframes = 9
+frame = 3

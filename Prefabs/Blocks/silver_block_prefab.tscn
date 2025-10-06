@@ -4,5 +4,7 @@
 [ext_resource type="Script" uid="uid://dlkvedv7y5suh" path="res://Scripts/Blocks/silver_block_data.gd" id="2_7akyt"]
 
 [node name="Node2D" instance=ExtResource("1_2m6vy")]
-modulate = Color(0, 0.7376064, 0.39607188, 1)
 script = ExtResource("2_7akyt")
+
+[node name="Sprite2D" parent="." index="1"]
+frame = 6

@@ -73,7 +73,7 @@ func count_neighboring_walls(x, y):
 	
 func draw_cave():
 	for x in range(THICKNESS_OF_BORDERS):
-		for y in range(HEIGHT + THICKNESS_OF_BORDERS):
+		for y in range(HEIGHT + THICKNESS_OF_BORDERS + THICKNESS_OF_BORDERS):
 			var cell = BEDROCK_BLOCK.instantiate()
 			cell.position = Vector2(-x * CELL_SIZE, y * CELL_SIZE)
 			add_child(cell) 
@@ -93,24 +93,24 @@ func draw_cave():
 	for x in range(WIDTH):
 		for y in range(HEIGHT):
 			if grid[x][y]:
-				if(randf() * HEIGHT > (randf() * COPPER_ORE_RARITY + 1) * (HEIGHT - y)):
-					var cell = COPPER_ORE_BLOCK.instantiate()
-					cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
-					add_child(cell) 
-				else:if(randf() * HEIGHT > (randf() * IRON_ORE_RARITY + 1) * (HEIGHT - y)):
-					var cell = IRON_ORE_BLOCK.instantiate()
-					cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
-					add_child(cell) 
-				else:if(randf() * HEIGHT > (randf() * SILVER_ORE_RARITY + 1) * (HEIGHT - y)):
-					var cell = SILVER_ORE_BLOCK.instantiate()
+				if(randf() * HEIGHT > (randf() * DIAMOND_RARITY + 1) * (HEIGHT - y)):
+					var cell = DIAMOND_BLOCK.instantiate()
 					cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
 					add_child(cell) 
 				else:if(randf() * HEIGHT > (randf() * GOLD_ORE_RARITY + 1) * (HEIGHT - y)):
 					var cell = GOLD_ORE_BLOCK.instantiate()
 					cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
 					add_child(cell) 
-				else:if(randf() * HEIGHT > (randf() * DIAMOND_RARITY + 1) * (HEIGHT - y)):
-					var cell = DIAMOND_BLOCK.instantiate()
+				else:if(randf() * HEIGHT > (randf() * SILVER_ORE_RARITY + 1) * (HEIGHT - y)):
+					var cell = SILVER_ORE_BLOCK.instantiate()
+					cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
+					add_child(cell) 
+				else:if(randf() * HEIGHT > (randf() * IRON_ORE_RARITY + 1) * (HEIGHT - y)):
+					var cell = IRON_ORE_BLOCK.instantiate()
+					cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
+					add_child(cell) 
+				else:if(randf() * HEIGHT > (randf() * COPPER_ORE_RARITY + 1) * (HEIGHT - y)):
+					var cell = COPPER_ORE_BLOCK.instantiate()
 					cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
 					add_child(cell) 
 				else:

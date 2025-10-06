@@ -1,16 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://c7pr7h0ewv6vt"]
+[gd_scene load_steps=3 format=3 uid="uid://dl47ifbby56fp"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_r7mca"]
-size = Vector2(10, 10)
+[ext_resource type="PackedScene" uid="uid://f1j1yp33pky1" path="res://Prefabs/basic_block_prefab.tscn" id="1_i73xn"]
+[ext_resource type="Script" uid="uid://5a0j8nt02580" path="res://Scripts/Blocks/bedrock_block_data.gd" id="2_m72mm"]
 
-[node name="Node2D" type="StaticBody2D"]
+[node name="Node2D" instance=ExtResource("1_i73xn")]
+script = ExtResource("2_m72mm")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_r7mca")
-
-[node name="ColorRect" type="ColorRect" parent="."]
-offset_left = -5.0
-offset_top = -5.0
-offset_right = 5.0
-offset_bottom = 5.0
-color = Color(1, 0.5927982, 0.53257173, 1)
+[node name="Sprite2D" parent="." index="1"]
+frame = 0

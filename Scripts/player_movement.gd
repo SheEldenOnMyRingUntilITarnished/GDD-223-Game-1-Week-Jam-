@@ -6,7 +6,7 @@ extends CharacterBody2D
 
 var coyote_time_activated: bool = false
 
-const JUMP_HEIGHT: float = -530.0
+const JUMP_HEIGHT: float = -230.0
 var gravity: float = 12.0
 const MIN_GRAVITY: float = 12.0
 const MAX_GRAVITY: float = 22.5
@@ -18,22 +18,39 @@ const FRICTION: float = 10.0
 signal update_money(value: int)
 var value: int = 0
 
+#Pickaxe Upgradable Stats
+var mining_speed: float = 1.0
+var mining_range: int = 15
+var mining_fortune: float = 1.0
+var mining_size: int = 4
+
+func _ready() -> void:
+	Update_Pickaxe_Stats()
+
 func _process(delta: float) -> void:
 		#Pickaxe
 	if Input.is_action_pressed("Player_Pickaxe_Left") && MiningTimer.is_stopped():
-		Check_Pickaxe($RayCasts/Pickaxe/Pickaxe_Left)
+		for i in mining_size:
+			Check_Pickaxe($RayCasts/Pickaxe/Pickaxe_Left, -mining_range * i,0)
+		
 		MiningTimer.start()
 		
 	else: if Input.is_action_pressed("Player_Pickaxe_Right")&& MiningTimer.is_stopped():
-		Check_Pickaxe($RayCasts/Pickaxe/Pickaxe_Right)
+		for i in mining_size:
+			Check_Pickaxe($RayCasts/Pickaxe/Pickaxe_Right, mining_range * i, 0)
+		
 		MiningTimer.start()
 		
 	else: if Input.is_action_pressed("Player_Pickaxe_Up")&& MiningTimer.is_stopped():
-		Check_Pickaxe($RayCasts/Pickaxe/Pickaxe_Up)
+		for i in mining_size:
+			Check_Pickaxe($RayCasts/Pickaxe/Pickaxe_Up, 0, -mining_range * i)
+		
 		MiningTimer.start()
 		
 	else: if Input.is_action_pressed("Player_Pickaxe_Down")&& MiningTimer.is_stopped():
-		Check_Pickaxe($RayCasts/Pickaxe/Pickaxe_Down)
+		for i in mining_size:
+			Check_Pickaxe($RayCasts/Pickaxe/Pickaxe_Down, 0, mining_range * i)
+		
 		MiningTimer.start()
 
 func _physics_process(delta: float) -> void:
@@ -82,14 +99,18 @@ func _physics_process(delta: float) -> void:
 	
 	move_and_slide()	
 
-func Check_Pickaxe(dir: RayCast2D):
+func Check_Pickaxe(dir: RayCast2D, x: int, y: int):
+	
+	dir.target_position = Vector2(x,y)
+	
 	if dir.is_colliding():
 		var block = dir.get_collider()
 		if !block.get_script(): return
 		
 		if block.mineable:
-			value += block.value
+			value += round(block.value * mining_fortune)
 			update_money.emit(value)
 			block.Mined()
-	else:
-		MiningTimer.stop()
+
+func Update_Pickaxe_Stats():
+	MiningTimer.wait_time = mining_speed

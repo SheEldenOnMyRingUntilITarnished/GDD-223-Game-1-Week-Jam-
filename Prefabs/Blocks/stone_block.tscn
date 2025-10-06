@@ -4,5 +4,4 @@
 [ext_resource type="Script" uid="uid://cueeei6t6l4vs" path="res://Scripts/Blocks/stone_block_data.gd" id="2_oqf4d"]
 
 [node name="Node2D" instance=ExtResource("1_oquhy")]
-modulate = Color(0.79524535, 0.0524953, 0.99999994, 1)
 script = ExtResource("2_oqf4d")

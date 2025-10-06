@@ -28,10 +28,10 @@ offset_bottom = 40.0
 
 [node name="Label" type="Label" parent="Control"]
 layout_mode = 0
-offset_left = 560.0
-offset_top = 159.0
-offset_right = 600.0
-offset_bottom = 247.0
+offset_left = 139.0
+offset_top = -161.0
+offset_right = 179.0
+offset_bottom = -73.0
 theme_override_font_sizes/font_size = 64
 text = "0"
 script = ExtResource("3_0e3vx")

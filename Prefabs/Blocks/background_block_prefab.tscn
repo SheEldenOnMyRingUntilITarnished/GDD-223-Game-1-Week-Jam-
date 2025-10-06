@@ -1,11 +1,12 @@
-[gd_scene format=3 uid="uid://bg5ca0t064s33"]
+[gd_scene load_steps=2 format=3 uid="uid://bg5ca0t064s33"]
+
+[ext_resource type="Texture2D" uid="uid://cayylhm77epw2" path="res://Block Sprites.png" id="1_u057r"]
 
 [node name="Node2D" type="Node2D"]
 z_index = -100
 
-[node name="ColorRect" type="ColorRect" parent="."]
-offset_left = -5.0
-offset_top = -5.0
-offset_right = 5.0
-offset_bottom = 5.0
-color = Color(0.45452422, 0.45452428, 0.45452422, 1)
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(1.25, 1.25)
+texture = ExtResource("1_u057r")
+hframes = 9
+frame = 1
