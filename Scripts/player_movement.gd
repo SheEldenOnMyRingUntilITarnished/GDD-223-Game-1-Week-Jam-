@@ -17,6 +17,7 @@ const FRICTION: float = 10.0
 
 signal update_money(value: int)
 var value: int = 0
+var in_shop:bool = false
 
 #Pickaxe Upgradable Stats
 var mining_speed: float = 1.0
@@ -24,10 +25,27 @@ var mining_range: int = 15
 var mining_fortune: float = 1.0
 var mining_size: int = 4
 
+#Light Stats
+var max_lamp_size: float = 0.3
+var lamp_decrease_speed: float = 0.005
+
 func _ready() -> void:
 	Update_Pickaxe_Stats()
+	$PointLight2D.scale.x = max_lamp_size
+	$PointLight2D.scale.y = max_lamp_size
 
 func _process(delta: float) -> void:
+	
+	if !$PointLight2D.scale.x < 0.03 && !$PointLight2D.scale.y < 0.03 && !in_shop:
+		$PointLight2D.scale.x -= lamp_decrease_speed * delta
+		$PointLight2D.scale.y -= lamp_decrease_speed * delta
+	
+	if Input.is_action_just_pressed("Player_Interact"):
+		if in_shop:
+			in_shop = false
+		else:
+			in_shop = true
+	
 		#Pickaxe
 	if Input.is_action_pressed("Player_Pickaxe_Left") && MiningTimer.is_stopped():
 		for i in mining_size:

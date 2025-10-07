@@ -1,0 +1,63 @@
+[gd_scene load_steps=2 format=3 uid="uid://nxbppas5ve38"]
+
+[ext_resource type="Script" uid="uid://dcjnwciimv21d" path="res://Scripts/shop_data.gd" id="1_4fjqj"]
+
+[node name="Shop" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_4fjqj")
+
+[node name="Refill Oil Button" type="Button" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 17.0
+text = "Refill Oil"
+
+[node name="Increase Max Oil Size Button" type="Button" parent="."]
+layout_mode = 0
+offset_top = 33.0
+offset_right = 171.0
+offset_bottom = 64.0
+text = "Increase Max Oil Size"
+
+[node name="Decrease The Oil Burn Rate Button" type="Button" parent="."]
+layout_mode = 0
+offset_top = 67.0
+offset_right = 219.0
+offset_bottom = 98.0
+text = "Decrease The Oil Burn Rate"
+
+[node name="Increase Pickaxe Range Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 110.0
+offset_right = 74.0
+offset_bottom = 141.0
+text = "Increase Pickaxe Range"
+
+[node name="Decrease Pickaxe Cooldown Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 143.0
+offset_right = 172.0
+offset_bottom = 174.0
+text = "Decrease Pickaxe Cooldown"
+
+[node name="Increase Pickaxe Fortune Enchantment Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 177.0
+offset_right = 220.0
+offset_bottom = 208.0
+text = "Increase Pickaxe Fortune Enchantment"
+
+[connection signal="pressed" from="Refill Oil Button" to="." method="_on_refill_oil_button_pressed"]
+[connection signal="pressed" from="Increase Max Oil Size Button" to="." method="_on_increase_max_oil_size_button_pressed"]
+[connection signal="pressed" from="Decrease The Oil Burn Rate Button" to="." method="_on_decrease_the_oil_burn_rate_button_pressed"]
+[connection signal="pressed" from="Increase Pickaxe Range Button" to="." method="_on_increase_pickaxe_range_button_pressed"]
+[connection signal="pressed" from="Decrease Pickaxe Cooldown Button" to="." method="_on_decrease_pickaxe_cooldown_button_pressed"]
+[connection signal="pressed" from="Increase Pickaxe Fortune Enchantment Button" to="." method="_on_increase_pickaxe_fortune_enchantment_button_pressed"]

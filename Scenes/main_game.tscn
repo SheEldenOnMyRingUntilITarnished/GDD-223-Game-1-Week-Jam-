@@ -1,8 +1,19 @@
-[gd_scene load_steps=4 format=3 uid="uid://632ip3qy3hbl"]
+[gd_scene load_steps=8 format=3 uid="uid://632ip3qy3hbl"]
 
 [ext_resource type="PackedScene" uid="uid://gi2xish0ma2a" path="res://Scenes/cave_generator.tscn" id="1_l756w"]
 [ext_resource type="PackedScene" uid="uid://un0y14wnyj4r" path="res://Prefabs/Player.tscn" id="2_pu3va"]
 [ext_resource type="Script" uid="uid://xqb3l377u5ld" path="res://Scripts/ValueHolder.gd" id="3_0e3vx"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_0e3vx"]
+light_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_6j5ir"]
+light_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_mgc0q"]
+light_mode = 1
+
+[sub_resource type="LabelSettings" id="LabelSettings_0e3vx"]
 
 [node name="MainGame" type="Node2D"]
 
@@ -17,23 +28,36 @@ position = Vector2(160, -80)
 position = Vector2(0, 3)
 zoom = Vector2(7, 7)
 
+[node name="Control" type="Control" parent="Player"]
+material = SubResource("CanvasItemMaterial_0e3vx")
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -91.0
+offset_top = -48.0
+offset_right = 101.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VSplitContainer" type="VSplitContainer" parent="Player/Control"]
+material = SubResource("CanvasItemMaterial_6j5ir")
+layout_mode = 0
+offset_right = 183.0
+offset_bottom = 23.0
+
+[node name="Label" type="Label" parent="Player/Control/VSplitContainer"]
+z_index = 100
+material = SubResource("CanvasItemMaterial_mgc0q")
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "0"
+label_settings = SubResource("LabelSettings_0e3vx")
+horizontal_alignment = 1
+script = ExtResource("3_0e3vx")
+
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 color = Color(0, 0, 0, 1)
 
-[node name="Control" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Label" type="Label" parent="Control"]
-layout_mode = 0
-offset_left = 139.0
-offset_top = -161.0
-offset_right = 179.0
-offset_bottom = -73.0
-theme_override_font_sizes/font_size = 64
-text = "0"
-script = ExtResource("3_0e3vx")
-
-[connection signal="update_money" from="Player" to="Control/Label" method="_on_player_update_money"]
+[connection signal="update_money" from="Player" to="Player/Control/VSplitContainer/Label" method="_on_player_update_money"]

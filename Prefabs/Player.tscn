@@ -104,7 +104,7 @@ target_position = Vector2(-2, 0)
 hit_from_inside = true
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
-position = Vector2(0.5, 4.5)
-scale = Vector2(0.3, 0.3)
+position = Vector2(-0.5, 4.5)
+scale = Vector2(0.03, 0.03)
 energy = 0.56
 texture = ExtResource("3_b43ah")
