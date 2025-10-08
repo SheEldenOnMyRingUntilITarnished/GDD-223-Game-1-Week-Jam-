@@ -7,4 +7,4 @@
 script = ExtResource("2_kw830")
 
 [node name="Sprite2D" parent="." index="1"]
-frame = 8
+frame = 5

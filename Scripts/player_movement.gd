@@ -3,12 +3,15 @@ extends CharacterBody2D
 @onready var CoyoteTimer: Timer = $Timers/CoyoteTimer
 @onready var JumpBufferTimer: Timer = $Timers/JumpBufferTimer
 @onready var MiningTimer: Timer = $Timers/MiningCooldown
+@onready var GetUpTimer: Timer = $Timers/GetUpTimer
+
+@onready var LightSource: PointLight2D = $AnimatedSprite2D/PointLight2D
 
 var coyote_time_activated: bool = false
 
-const JUMP_HEIGHT: float = -230.0
+const JUMP_HEIGHT: float = -200.0
 var gravity: float = 12.0
-const MIN_GRAVITY: float = 12.0
+const MIN_GRAVITY: float = 6.0
 const MAX_GRAVITY: float = 22.5
 
 const MAX_SPEED: float = 80.0
@@ -19,26 +22,36 @@ signal update_money(value: int)
 var value: int = 0
 var in_shop:bool = false
 
+#Animation stuff
+var falling:bool = false
+var large_falling:bool = false
+var landed = false
+
 #Pickaxe Upgradable Stats
 var mining_speed: float = 1.0
 var mining_range: int = 15
 var mining_fortune: float = 1.0
-var mining_size: int = 4
 
 #Light Stats
-var max_lamp_size: float = 0.3
-var lamp_decrease_speed: float = 0.005
+var max_lamp_size: float = 0.15
+var lamp_decrease_speed: float = 0.0005
 
 func _ready() -> void:
 	Update_Pickaxe_Stats()
-	$PointLight2D.scale.x = max_lamp_size
-	$PointLight2D.scale.y = max_lamp_size
+	LightSource.scale.x = max_lamp_size
+	LightSource.scale.y = max_lamp_size
+	
+	large_falling = false
+	falling = false
+	landed = true
+	GetUpTimer.start(5)
+
 
 func _process(delta: float) -> void:
 	
-	if !$PointLight2D.scale.x < 0.03 && !$PointLight2D.scale.y < 0.03 && !in_shop:
-		$PointLight2D.scale.x -= lamp_decrease_speed * delta
-		$PointLight2D.scale.y -= lamp_decrease_speed * delta
+	if !LightSource.scale.x < 0.000001 && !LightSource.scale.y < 0.000001 && !in_shop:
+		LightSource.scale.x -= lamp_decrease_speed * delta
+		LightSource.scale.y -= lamp_decrease_speed * delta
 	
 	if Input.is_action_just_pressed("Player_Interact"):
 		if in_shop:
@@ -48,35 +61,60 @@ func _process(delta: float) -> void:
 	
 		#Pickaxe
 	if Input.is_action_pressed("Player_Pickaxe_Left") && MiningTimer.is_stopped():
-		for i in mining_size:
-			Check_Pickaxe($RayCasts/Pickaxe/Pickaxe_Left, -mining_range * i,0)
+		Check_Pickaxe($RayCasts/Pickaxe/Pickaxe_Left, -mining_range,0)
 		
 		MiningTimer.start()
 		
 	else: if Input.is_action_pressed("Player_Pickaxe_Right")&& MiningTimer.is_stopped():
-		for i in mining_size:
-			Check_Pickaxe($RayCasts/Pickaxe/Pickaxe_Right, mining_range * i, 0)
+		Check_Pickaxe($RayCasts/Pickaxe/Pickaxe_Right, mining_range, 0)
 		
 		MiningTimer.start()
 		
 	else: if Input.is_action_pressed("Player_Pickaxe_Up")&& MiningTimer.is_stopped():
-		for i in mining_size:
-			Check_Pickaxe($RayCasts/Pickaxe/Pickaxe_Up, 0, -mining_range * i)
+		Check_Pickaxe($RayCasts/Pickaxe/Pickaxe_Up, 0, -mining_range)
 		
 		MiningTimer.start()
 		
 	else: if Input.is_action_pressed("Player_Pickaxe_Down")&& MiningTimer.is_stopped():
-		for i in mining_size:
-			Check_Pickaxe($RayCasts/Pickaxe/Pickaxe_Down, 0, mining_range * i)
+		Check_Pickaxe($RayCasts/Pickaxe/Pickaxe_Down, 0, mining_range)
 		
 		MiningTimer.start()
 
 func _physics_process(delta: float) -> void:
 	var x_input: float = Input.get_action_strength("Player_Right") - Input.get_action_strength("Player_Left")
 	var velocity_weight: float = delta * (ACCELERATION if x_input else FRICTION)
-	velocity.x = lerp(velocity.x, x_input * MAX_SPEED, velocity_weight)
+	if is_on_floor() && !landed:
+		velocity.x = lerp(velocity.x, x_input * MAX_SPEED, velocity_weight)
+		
+		if x_input > 0:
+			$AnimatedSprite2D.scale.x = 1
+			if !falling:
+				$AnimatedSprite2D.play("Move") 
+			
+		else: if x_input < 0:
+			$AnimatedSprite2D.scale.x = -1
+			if !falling:
+				$AnimatedSprite2D.play("Move") 
+			
+		else:
+			$AnimatedSprite2D.play("Idle")
 	
 	if is_on_floor():
+		if large_falling == false:
+			velocity.x = 0
+			$AnimatedSprite2D.play("Land")
+			large_falling = false
+			falling = false
+			landed = true
+			GetUpTimer.start(5)
+		
+		if falling:
+			velocity.x = 0
+			$AnimatedSprite2D.play("Land")
+			falling = false
+			landed = true
+			GetUpTimer.start(1)
+		
 		coyote_time_activated = false
 		gravity = lerp(gravity, MIN_GRAVITY, MIN_GRAVITY * delta)
 	else:
@@ -86,10 +124,17 @@ func _physics_process(delta: float) -> void:
 	
 		if Input.is_action_just_released("Player_Jump") or is_on_ceiling():
 			velocity.y *= 0.5
-		
 		gravity = lerp(gravity, MAX_GRAVITY, MIN_GRAVITY * delta)
+		print(gravity)
+		if gravity >= 22 && falling:
+			$AnimatedSprite2D.play("Large_Fall")
+			large_falling = true
+		else: if gravity > 17 && !falling:
+			falling = true
+		else: if !falling:
+			$AnimatedSprite2D.play("Fall")
 	
-	if Input.is_action_just_pressed("Player_Jump"):
+	if Input.is_action_just_pressed("Player_Jump") && !landed:
 		if JumpBufferTimer.is_stopped():
 			JumpBufferTimer.start()
 	
@@ -123,12 +168,15 @@ func Check_Pickaxe(dir: RayCast2D, x: int, y: int):
 	
 	if dir.is_colliding():
 		var block = dir.get_collider()
-		if !block.get_script(): return
-		
-		if block.mineable:
-			value += round(block.value * mining_fortune)
-			update_money.emit(value)
-			block.Mined()
+		if block.get_script() && block.is_class("StaticBody2D"):
+			if block.mineable:
+				value += round(block.value * mining_fortune)
+				update_money.emit(value)
+				block.Mined()
 
 func Update_Pickaxe_Stats():
 	MiningTimer.wait_time = mining_speed
+
+
+func _on_get_up_timer_timeout() -> void:
+	landed = false

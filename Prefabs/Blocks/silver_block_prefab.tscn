@@ -7,4 +7,4 @@
 script = ExtResource("2_7akyt")
 
 [node name="Sprite2D" parent="." index="1"]
-frame = 6
+frame = 3

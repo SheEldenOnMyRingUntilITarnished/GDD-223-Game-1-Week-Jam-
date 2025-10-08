@@ -1,0 +1,151 @@
+[gd_scene load_steps=7 format=3 uid="uid://cjstv5da8jqnl"]
+
+[ext_resource type="Texture2D" uid="uid://ccct8fg1lr7n0" path="res://Sprites/Miner.png" id="1_28flt"]
+[ext_resource type="Script" uid="uid://c0m58p2nicm4h" path="res://Scripts/main_menu_system.gd" id="1_48xlc"]
+
+[sub_resource type="Animation" id="Animation_48xlc"]
+resource_name = "Main_Menu_Falling"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1, 1.5, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(-1, 0.1), Vector2(0.793, -0.1), Vector2(1, 0.1), Vector2(-0.003, -0.1), Vector2(-1, 0.1)]
+}
+
+[sub_resource type="Animation" id="Animation_1ehe0"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ColorRect:color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ColorRect:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_ce3w2"]
+resource_name = "Start_Game"
+length = 1.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(10, 10),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 20)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ColorRect:color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.9, 1.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ColorRect:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1ehe0"]
+_data = {
+&"Main_Menu_Falling": SubResource("Animation_48xlc"),
+&"RESET": SubResource("Animation_1ehe0"),
+&"Start_Game": SubResource("Animation_ce3w2")
+}
+
+[node name="MainMenu" type="Node2D"]
+script = ExtResource("1_48xlc")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(7, 7)
+
+[node name="Start_Button" type="Button" parent="."]
+offset_left = -81.0
+offset_top = -19.0
+offset_right = 3.0
+offset_bottom = 12.0
+scale = Vector2(0.56000125, 0.56000125)
+text = "START"
+
+[node name="Quit_Button" type="Button" parent="."]
+offset_left = -81.0
+offset_right = 3.0
+offset_bottom = 31.0
+scale = Vector2(0.56000125, 0.56000125)
+text = "QUIT"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(51, -22)
+scale = Vector2(6, 6)
+texture = ExtResource("1_28flt")
+hframes = 9
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_1ehe0")
+}
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+offset_left = -99.0
+offset_top = -100.0
+offset_right = 101.0
+offset_bottom = 100.0
+color = Color(0, 0, 0, 0)
+
+[connection signal="pressed" from="Start_Button" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="Quit_Button" to="." method="_on_quit_button_pressed"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

@@ -7,4 +7,4 @@
 script = ExtResource("2_hrn1i")
 
 [node name="Sprite2D" parent="." index="1"]
-frame = 5
+frame = 2

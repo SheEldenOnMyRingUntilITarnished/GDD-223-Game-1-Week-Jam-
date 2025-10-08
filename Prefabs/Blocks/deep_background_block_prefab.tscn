@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://bobsqg4v34x3n"]
+
+[ext_resource type="PackedScene" uid="uid://f1j1yp33pky1" path="res://Prefabs/basic_block_prefab.tscn" id="1_wovp5"]
+[ext_resource type="Script" uid="uid://c0x1aufh07a1d" path="res://Scripts/Blocks/background_block_data.gd" id="2_oj3hq"]
+
+[node name="Node2D" instance=ExtResource("1_wovp5")]
+z_index = -100
+script = ExtResource("2_oj3hq")
+
+[node name="CollisionShape2D" parent="." index="0"]
+disabled = true
+
+[node name="Sprite2D" parent="." index="1"]
+frame = 9

@@ -5,3 +5,6 @@
 
 [node name="Node2D" instance=ExtResource("1_oquhy")]
 script = ExtResource("2_oqf4d")
+
+[node name="Sprite2D" parent="." index="1"]
+frame = 6

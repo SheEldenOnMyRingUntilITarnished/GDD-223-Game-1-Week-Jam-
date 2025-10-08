@@ -1,5 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://632ip3qy3hbl"]
+[gd_scene load_steps=12 format=3 uid="uid://632ip3qy3hbl"]
 
+[ext_resource type="Script" uid="uid://b3toqbb2vuqom" path="res://Scripts/main_game_system.gd" id="1_6j5ir"]
 [ext_resource type="PackedScene" uid="uid://gi2xish0ma2a" path="res://Scenes/cave_generator.tscn" id="1_l756w"]
 [ext_resource type="PackedScene" uid="uid://un0y14wnyj4r" path="res://Prefabs/Player.tscn" id="2_pu3va"]
 [ext_resource type="Script" uid="uid://xqb3l377u5ld" path="res://Scripts/ValueHolder.gd" id="3_0e3vx"]
@@ -14,19 +15,91 @@ light_mode = 1
 light_mode = 1
 
 [sub_resource type="LabelSettings" id="LabelSettings_0e3vx"]
+font_size = 4096
+outline_size = 500
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Animation" id="Animation_0e3vx"]
+resource_name = "Fade_From_Black"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Player/Camera2D/ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Player/Camera2D/ColorRect:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_6j5ir"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Player/Camera2D/ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Player/Camera2D/ColorRect:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6j5ir"]
+_data = {
+&"Fade_From_Black": SubResource("Animation_0e3vx"),
+&"RESET": SubResource("Animation_6j5ir")
+}
 
 [node name="MainGame" type="Node2D"]
+script = ExtResource("1_6j5ir")
 
 [node name="Systems" type="Node" parent="."]
 
 [node name="CaveGenerator" parent="Systems" instance=ExtResource("1_l756w")]
 
 [node name="Player" parent="." instance=ExtResource("2_pu3va")]
-position = Vector2(160, -80)
+position = Vector2(316, 53)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2(0, 3)
 zoom = Vector2(7, 7)
+
+[node name="ColorRect" type="ColorRect" parent="Player/Camera2D"]
+visible = false
+offset_left = -100.0
+offset_top = -80.0
+offset_right = 100.0
+offset_bottom = 120.0
+color = Color(0, 0, 0, 1)
 
 [node name="Control" type="Control" parent="Player"]
 material = SubResource("CanvasItemMaterial_0e3vx")
@@ -44,8 +117,10 @@ grow_vertical = 2
 [node name="VSplitContainer" type="VSplitContainer" parent="Player/Control"]
 material = SubResource("CanvasItemMaterial_6j5ir")
 layout_mode = 0
-offset_right = 183.0
-offset_bottom = 23.0
+offset_left = 4.0
+offset_right = 2342.0
+offset_bottom = 5578.0
+scale = Vector2(0.0057184095, 0.0057184095)
 
 [node name="Label" type="Label" parent="Player/Control/VSplitContainer"]
 z_index = 100
@@ -59,5 +134,10 @@ script = ExtResource("3_0e3vx")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 color = Color(0, 0, 0, 1)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_6j5ir")
+}
 
 [connection signal="update_money" from="Player" to="Player/Control/VSplitContainer/Label" method="_on_player_update_money"]
