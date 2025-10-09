@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://cln704s3yf8b"]
+
+[ext_resource type="Script" uid="uid://b5o5rdufrekcf" path="res://Scripts/refill_oil_station_data.gd" id="1_keblg"]
+[ext_resource type="Texture2D" uid="uid://cayylhm77epw2" path="res://Sprites/Block Sprites.png" id="2_p261y"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r7mca"]
+size = Vector2(10, 10)
+
+[node name="Node2D" type="Area2D"]
+script = ExtResource("1_keblg")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_r7mca")
+disabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.15686275, 0, 1, 1)
+scale = Vector2(1.25, 1.25)
+texture = ExtResource("2_p261y")
+hframes = 11
+frame = 3
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]

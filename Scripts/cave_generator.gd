@@ -2,19 +2,21 @@ extends Node2D
 
 #ORE RARITY
 const COPPER_ORE_RARITY: float = 1
-const IRON_ORE_RARITY: float = 3
-const SILVER_ORE_RARITY: float = 5
-const GOLD_ORE_RARITY: float = 8
-const DIAMOND_RARITY: float = 12
+const IRON_ORE_RARITY: float = 7
+const SILVER_ORE_RARITY: float = 12
+const GOLD_ORE_RARITY: float = 56
+const DIAMOND_RARITY: float = 82
 
 #CAVE GENERATION---
-const WIDTH: int = 60
-const HEIGHT_OF_FALL_AREA: int = 300
-const HEIGHT_OF_CAVE: int = 600
-const HEIGHT_OF_WIN_ROOM: int = 30
-const THICKNESS_OF_BORDERS: int = 12
+const WIDTH: float = 60
+const HEIGHT_OF_FALL_AREA: float = 300
+const AMOUNT_OF_SHOPS: float = 6
+const SHOP_HEIGHT: float = 12
+const HEIGHT_OF_CAVE: float = 1200
+const HEIGHT_OF_WIN_ROOM: float = 30
+const THICKNESS_OF_BORDERS: float = 12
 const CELL_SIZE: float = 10.0
-const CAVE_SMOOTHING: int = 4
+const CAVE_SMOOTHING: float = 4
 
 #BLOCKS
 const BACKGROUND_BLOCK = preload("res://Prefabs/Blocks/background_block_prefab.tscn")
@@ -27,6 +29,14 @@ const SILVER_ORE_BLOCK = preload("res://Prefabs/Blocks/silver_block_prefab.tscn"
 const GOLD_ORE_BLOCK = preload("res://Prefabs/Blocks/gold_block_prefab.tscn")
 const DIAMOND_BLOCK = preload("res://Prefabs/Blocks/diamond_block.tscn")
 const BEDROCK_BLOCK = preload("res://Prefabs/Blocks/bedrock_block_prefab.tscn")
+
+#DECORATIONS
+const TORCH_BLOCK = preload("res://Prefabs/Blocks/torch_block_prefab.tscn")
+#const ROCK_DECORATION = preload()
+#const ROOF_ROCK_DECORATION = preload()
+
+#Shop
+const COUNT_OF_TORCHS: int = 12
 
 #Grid
 var grid = []
@@ -48,7 +58,17 @@ func initalize_grid():
 			else:
 				grid[x].append(randf() > 0.45)
 		for y in range(HEIGHT_OF_CAVE - HEIGHT_OF_WIN_ROOM):
-			grid[x].append(randf() > 0.45)
+			var shop_block = false
+			for i in AMOUNT_OF_SHOPS:
+				if y > HEIGHT_OF_CAVE/(i+1) && y < HEIGHT_OF_CAVE/(i+1) + SHOP_HEIGHT:
+					grid[x].append(false)
+					shop_block = true
+				else: if y > HEIGHT_OF_CAVE/(i+1) - SHOP_HEIGHT/2 && y < HEIGHT_OF_CAVE/(i+1) + SHOP_HEIGHT + SHOP_HEIGHT/2:
+					grid[x].append(true)
+					shop_block = true
+			if shop_block == false:
+				grid[x].append(randf() > 0.45)
+			
 		for y in range(HEIGHT_OF_WIN_ROOM):
 			grid[x].append(true)
 
@@ -59,10 +79,13 @@ func generate_cave():
 		for x in range(WIDTH):
 			for y in range(HEIGHT_OF_CAVE):
 				var wall_count = count_neighboring_walls(x, y)
-				if grid[x][y]:
-					new_grid[x][y] = wall_count > 3
-				else:
-					new_grid[x][y] = wall_count > 4
+				for s in AMOUNT_OF_SHOPS:
+					if y > HEIGHT_OF_CAVE/(s+1) - SHOP_HEIGHT/2 && y < HEIGHT_OF_CAVE/(s+1) + SHOP_HEIGHT + SHOP_HEIGHT/2:
+						pass
+					else: if grid[x][y]:
+						new_grid[x][y] = wall_count > 3
+					else:
+						new_grid[x][y] = wall_count > 4
 		grid = new_grid
 
 #Counts the points that are true around a target point
@@ -101,52 +124,77 @@ func draw_cave():
 			cell.position = Vector2(x * CELL_SIZE, (y + HEIGHT_OF_CAVE) * CELL_SIZE)
 			add_child(cell) 
 		
+	var amount_of_torchs = 0
 	for x in range(WIDTH):
 		for y in range(HEIGHT_OF_CAVE):
-			if grid[x][y]:
-				if(randf() * HEIGHT_OF_CAVE > (randf() * DIAMOND_RARITY + 1) * (HEIGHT_OF_CAVE - y)):
-					var cell = DIAMOND_BLOCK.instantiate()
-					cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
-					add_child(cell) 
-				else:if(randf() * HEIGHT_OF_CAVE > (randf() * GOLD_ORE_RARITY + 1) * (HEIGHT_OF_CAVE - y)):
-					var cell = GOLD_ORE_BLOCK.instantiate()
-					cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
-					add_child(cell) 
-				else:if(randf() * HEIGHT_OF_CAVE > (randf() * SILVER_ORE_RARITY + 1) * (HEIGHT_OF_CAVE - y)):
-					var cell = SILVER_ORE_BLOCK.instantiate()
-					cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
-					add_child(cell) 
-				else:if(randf() * HEIGHT_OF_CAVE > (randf() * IRON_ORE_RARITY + 1) * (HEIGHT_OF_CAVE - y)):
-					var cell = IRON_ORE_BLOCK.instantiate()
-					cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
-					add_child(cell) 
-				else:if(randf() * HEIGHT_OF_CAVE > (randf() * COPPER_ORE_RARITY + 1) * (HEIGHT_OF_CAVE - y)):
-					var cell = COPPER_ORE_BLOCK.instantiate()
-					cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
-					add_child(cell) 
-				else:
-					var cell = STONE_BLOCK.instantiate()
-					cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
-					add_child(cell) 
-			else:
-				var wall_count = count_neighboring_walls(x, y)
-				var cell
-				if wall_count > 0:
-					cell = BACKGROUND_BLOCK.instantiate()
-				else:
-					wall_count += count_neighboring_walls(x+1, y)
-					wall_count += count_neighboring_walls(x-1, y)
-					wall_count += count_neighboring_walls(x+1, y-1)
-					wall_count += count_neighboring_walls(x-1, y+1)
-					wall_count += count_neighboring_walls(x+1, y+1)
-					wall_count += count_neighboring_walls(x-1, y-1)
-					wall_count += count_neighboring_walls(x, y+1)
-					wall_count += count_neighboring_walls(x, y-1)
-					if wall_count > 0:
-						cell = DEEP_BACKGROUND_BLOCK.instantiate()
+			var cell = null
+			for i in AMOUNT_OF_SHOPS:
+					if y - HEIGHT_OF_FALL_AREA >= HEIGHT_OF_CAVE/(i+1) && y - HEIGHT_OF_FALL_AREA <= HEIGHT_OF_CAVE/(i+1) + 3 && (x < WIDTH/2 - 6 || x > WIDTH/2 + 6):
+						cell = BEDROCK_BLOCK.instantiate()
+						cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
+						add_child(cell)
+					else:if y - HEIGHT_OF_FALL_AREA >= HEIGHT_OF_CAVE/(i+1) + SHOP_HEIGHT && y - HEIGHT_OF_FALL_AREA <= HEIGHT_OF_CAVE/(i+1) + SHOP_HEIGHT + 3  && (x < WIDTH/2 - 6 || x > WIDTH/2 + 6):
+						cell = BEDROCK_BLOCK.instantiate()
+						cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
+						add_child(cell) 
+					else:if y - HEIGHT_OF_FALL_AREA == HEIGHT_OF_CAVE/(i+1) + SHOP_HEIGHT - 1 && x == WIDTH/3:
+						cell = BEDROCK_BLOCK.instantiate()#OIL REFILL
+						#cell.connect("interacted_with", $"../../Player")
+						cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
+						add_child(cell) 
 					else:
-						cell = DEEPEST_BACKGROUND_BLOCK.instantiate()
-					
-				cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
-				add_child(cell) 
-			
+						cell = null
+			if grid[x][y]:
+				if cell == null:
+					if(randf() * HEIGHT_OF_CAVE > (randf() * DIAMOND_RARITY + 1) * (HEIGHT_OF_CAVE - y)):
+						cell = DIAMOND_BLOCK.instantiate()
+						cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
+						add_child(cell) 
+					else:if(randf() * HEIGHT_OF_CAVE > (randf() * GOLD_ORE_RARITY + 1) * (HEIGHT_OF_CAVE - y)):
+						cell = GOLD_ORE_BLOCK.instantiate()
+						cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
+						add_child(cell) 
+					else:if(randf() * HEIGHT_OF_CAVE > (randf() * SILVER_ORE_RARITY + 1) * (HEIGHT_OF_CAVE - y)):
+						cell = SILVER_ORE_BLOCK.instantiate()
+						cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
+						add_child(cell) 
+					else:if(randf() * HEIGHT_OF_CAVE > (randf() * IRON_ORE_RARITY + 1) * (HEIGHT_OF_CAVE - y)):
+						cell = IRON_ORE_BLOCK.instantiate()
+						cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
+						add_child(cell) 
+					else:if(randf() * HEIGHT_OF_CAVE > (randf() * COPPER_ORE_RARITY + 1) * (HEIGHT_OF_CAVE - y)):
+						cell = COPPER_ORE_BLOCK.instantiate()
+						cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
+						add_child(cell) 
+					else:
+						cell = STONE_BLOCK.instantiate()
+						cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
+						add_child(cell)
+			else:
+				if cell == null:
+					var wall_count = count_neighboring_walls(x, y)
+					if wall_count > 0:
+						cell = BACKGROUND_BLOCK.instantiate()
+					else:
+						wall_count += count_neighboring_walls(x+1, y)
+						wall_count += count_neighboring_walls(x-1, y)
+						wall_count += count_neighboring_walls(x+1, y-1)
+						wall_count += count_neighboring_walls(x-1, y+1)
+						wall_count += count_neighboring_walls(x+1, y+1)
+						wall_count += count_neighboring_walls(x-1, y-1)
+						wall_count += count_neighboring_walls(x, y+1)
+						wall_count += count_neighboring_walls(x, y-1)
+						if wall_count > 0:
+							cell = DEEP_BACKGROUND_BLOCK.instantiate()
+						else:
+							cell = DEEPEST_BACKGROUND_BLOCK.instantiate()
+						
+					cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
+					add_child(cell) 
+				
+		if x == WIDTH/COUNT_OF_TORCHS * amount_of_torchs:
+			amount_of_torchs += 1
+			for i in AMOUNT_OF_SHOPS:
+				var torch = TORCH_BLOCK.instantiate()
+				torch.position = Vector2(x * CELL_SIZE, (((HEIGHT_OF_CAVE)/(i+1) + SHOP_HEIGHT/2) + HEIGHT_OF_FALL_AREA) * CELL_SIZE)
+				add_child(torch) 

@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://c0gxwm6ed3chf"]
+
+[ext_resource type="PackedScene" uid="uid://f1j1yp33pky1" path="res://Prefabs/basic_block_prefab.tscn" id="1_d125p"]
+[ext_resource type="Script" uid="uid://c0x1aufh07a1d" path="res://Scripts/Blocks/background_block_data.gd" id="2_ou7ii"]
+[ext_resource type="Texture2D" uid="uid://1s6o2j7m8tni" path="res://Sprites/a5bbfead133882d0a9f4c14a092c97be9cbbf5a3.png" id="3_1ghvp"]
+
+[node name="Node2D" instance=ExtResource("1_d125p")]
+script = ExtResource("2_ou7ii")
+
+[node name="CollisionShape2D" parent="." index="0"]
+disabled = true
+
+[node name="Sprite2D" parent="." index="1"]
+frame = 5
+
+[node name="PointLight2D" type="PointLight2D" parent="." index="2"]
+scale = Vector2(0.3, 0.3)
+color = Color(1, 0.4509804, 0, 1)
+energy = 3.0
+texture = ExtResource("3_1ghvp")

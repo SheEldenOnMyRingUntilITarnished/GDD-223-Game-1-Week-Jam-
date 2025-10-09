@@ -19,6 +19,8 @@ const ACCELERATION: float = 8.0
 const FRICTION: float = 10.0
 
 signal update_money(value: int)
+signal update_camera(size: int)
+
 var value: int = 0
 var in_shop:bool = false
 
@@ -28,13 +30,16 @@ var large_falling:bool = false
 var landed = false
 
 #Pickaxe Upgradable Stats
-var mining_speed: float = 1.0
-var mining_range: int = 15
+var mining_speed: float = 0
+var mining_range: int = 300
 var mining_fortune: float = 1.0
 
 #Light Stats
 var max_lamp_size: float = 0.15
 var lamp_decrease_speed: float = 0.0005
+
+#Camera Stats
+var max_camera_size: float = 1
 
 func _ready() -> void:
 	Update_Pickaxe_Stats()
@@ -44,6 +49,9 @@ func _ready() -> void:
 	large_falling = false
 	falling = false
 	landed = true
+	
+	update_camera.emit(max_camera_size)
+	
 	GetUpTimer.start(5)
 
 
@@ -125,7 +133,7 @@ func _physics_process(delta: float) -> void:
 		if Input.is_action_just_released("Player_Jump") or is_on_ceiling():
 			velocity.y *= 0.5
 		gravity = lerp(gravity, MAX_GRAVITY, MIN_GRAVITY * delta)
-		print(gravity)
+		#print(gravity)
 		if gravity >= 22 && falling:
 			$AnimatedSprite2D.play("Large_Fall")
 			large_falling = true

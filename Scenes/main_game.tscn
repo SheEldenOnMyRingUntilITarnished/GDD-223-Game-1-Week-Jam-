@@ -1,9 +1,11 @@
-[gd_scene load_steps=12 format=3 uid="uid://632ip3qy3hbl"]
+[gd_scene load_steps=14 format=3 uid="uid://632ip3qy3hbl"]
 
 [ext_resource type="Script" uid="uid://b3toqbb2vuqom" path="res://Scripts/main_game_system.gd" id="1_6j5ir"]
 [ext_resource type="PackedScene" uid="uid://gi2xish0ma2a" path="res://Scenes/cave_generator.tscn" id="1_l756w"]
 [ext_resource type="PackedScene" uid="uid://un0y14wnyj4r" path="res://Prefabs/Player.tscn" id="2_pu3va"]
 [ext_resource type="Script" uid="uid://xqb3l377u5ld" path="res://Scripts/ValueHolder.gd" id="3_0e3vx"]
+[ext_resource type="Script" uid="uid://c21c0y6aq15l3" path="res://Scripts/camera_controller.gd" id="4_mgc0q"]
+[ext_resource type="PackedScene" uid="uid://nxbppas5ve38" path="res://Prefabs/shop_prefab.tscn" id="6_bb2iq"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_0e3vx"]
 light_mode = 1
@@ -91,7 +93,7 @@ position = Vector2(316, 53)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2(0, 3)
-zoom = Vector2(7, 7)
+script = ExtResource("4_mgc0q")
 
 [node name="ColorRect" type="ColorRect" parent="Player/Camera2D"]
 visible = false
@@ -100,6 +102,13 @@ offset_top = -80.0
 offset_right = 100.0
 offset_bottom = 120.0
 color = Color(0, 0, 0, 1)
+
+[node name="Shop" parent="Player/Camera2D" instance=ExtResource("6_bb2iq")]
+visible = false
+offset_left = -625.0
+offset_top = -346.0
+offset_right = -625.0
+offset_bottom = -346.0
 
 [node name="Control" type="Control" parent="Player"]
 material = SubResource("CanvasItemMaterial_0e3vx")
@@ -140,4 +149,5 @@ libraries = {
 &"": SubResource("AnimationLibrary_6j5ir")
 }
 
+[connection signal="update_camera" from="Player" to="Player/Camera2D" method="_on_player_update_camera"]
 [connection signal="update_money" from="Player" to="Player/Control/VSplitContainer/Label" method="_on_player_update_money"]
