@@ -11,8 +11,8 @@ const DIAMOND_RARITY: float = 82
 const WIDTH: float = 60
 const HEIGHT_OF_FALL_AREA: float = 300
 const SHOP_HEIGHT: float = 12
-const HEIGHT_OF_CAVE: float = 600
-const HEIGHT_OF_WIN_ROOM: float = 30
+const HEIGHT_OF_CAVE: float = 800
+const HEIGHT_OF_WIN_ROOM: float = 230
 const THICKNESS_OF_BORDERS: float = 12
 const CELL_SIZE: float = 10.0
 const CAVE_SMOOTHING: float = 4
@@ -28,6 +28,9 @@ const IRON_ORE_BLOCK = preload("res://Prefabs/Blocks/iron_ore_block_prefab.tscn"
 const SILVER_ORE_BLOCK = preload("res://Prefabs/Blocks/silver_block_prefab.tscn")
 const GOLD_ORE_BLOCK = preload("res://Prefabs/Blocks/gold_block_prefab.tscn")
 const DIAMOND_BLOCK = preload("res://Prefabs/Blocks/diamond_block.tscn")
+
+const WINNING_BLOCK = preload("res://Prefabs/Blocks/Winning_block_prefab.tscn")
+
 const BEDROCK_BLOCK = preload("res://Prefabs/Blocks/bedrock_block_prefab.tscn")
 
 #DECORATIONS
@@ -71,7 +74,7 @@ func initalize_grid(loop: float):
 					grid[x].append(randf() > 0.45)
 				
 			for y in range(HEIGHT_OF_WIN_ROOM):
-				grid[x].append(true)
+				grid[x].append(false)
 
 #Takes the random false points across the graph and enlargens them creating realistic erosion
 func generate_cave():
@@ -173,25 +176,30 @@ func draw_cave():
 						add_child(cell)
 			else:
 				if cell == null:
-					var wall_count = count_neighboring_walls(x, y)
-					if wall_count > 0:
-						cell = BACKGROUND_BLOCK.instantiate()
+					if y > HEIGHT_OF_CAVE - HEIGHT_OF_WIN_ROOM:
+						cell = WINNING_BLOCK.instantiate()
+						cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
+						add_child(cell) 
 					else:
-						wall_count += count_neighboring_walls(x+1, y)
-						wall_count += count_neighboring_walls(x-1, y)
-						wall_count += count_neighboring_walls(x+1, y-1)
-						wall_count += count_neighboring_walls(x-1, y+1)
-						wall_count += count_neighboring_walls(x+1, y+1)
-						wall_count += count_neighboring_walls(x-1, y-1)
-						wall_count += count_neighboring_walls(x, y+1)
-						wall_count += count_neighboring_walls(x, y-1)
+						var wall_count = count_neighboring_walls(x, y)
 						if wall_count > 0:
-							cell = DEEP_BACKGROUND_BLOCK.instantiate()
+							cell = BACKGROUND_BLOCK.instantiate()
 						else:
-							cell = DEEPEST_BACKGROUND_BLOCK.instantiate()
-						
-					cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
-					add_child(cell) 
+							wall_count += count_neighboring_walls(x+1, y)
+							wall_count += count_neighboring_walls(x-1, y)
+							wall_count += count_neighboring_walls(x+1, y-1)
+							wall_count += count_neighboring_walls(x-1, y+1)
+							wall_count += count_neighboring_walls(x+1, y+1)
+							wall_count += count_neighboring_walls(x-1, y-1)
+							wall_count += count_neighboring_walls(x, y+1)
+							wall_count += count_neighboring_walls(x, y-1)
+							if wall_count > 0:
+								cell = DEEP_BACKGROUND_BLOCK.instantiate()
+							else:
+								cell = DEEPEST_BACKGROUND_BLOCK.instantiate()
+							
+						cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
+						add_child(cell) 
 				
 		#if x == WIDTH/COUNT_OF_TORCHS * amount_of_torchs:
 		#	amount_of_torchs += 1

@@ -53,6 +53,42 @@ tracks/1/keys = {
 "update": 1,
 "values": [true, true]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = false
+tracks/2/path = NodePath("Player/Camera2D/Label:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 1,
+"values": []
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = false
+tracks/3/path = NodePath("Player/Camera2D/Restart_Button:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 1,
+"values": []
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = false
+tracks/4/path = NodePath("Player/Camera2D/Menu_Button:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 1,
+"values": []
+}
 
 [sub_resource type="Animation" id="Animation_bb2iq"]
 resource_name = "Fade_To_Black"
@@ -80,6 +116,42 @@ tracks/1/keys = {
 "update": 1,
 "values": [true]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Player/Camera2D/Label:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Player/Camera2D/Restart_Button:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Player/Camera2D/Menu_Button:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
 
 [sub_resource type="Animation" id="Animation_6j5ir"]
 length = 0.001
@@ -102,6 +174,42 @@ tracks/1/path = NodePath("Player/Camera2D/ColorRect:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Player/Camera2D/Label:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Player/Camera2D/Restart_Button:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Player/Camera2D/Menu_Button:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -138,40 +246,38 @@ offset_bottom = 120.0
 mouse_filter = 1
 color = Color(0, 0, 0, 1)
 
-[node name="Label" type="Label" parent="Player/Camera2D/ColorRect"]
+[node name="Label" type="Label" parent="Player/Camera2D"]
 visible = false
 z_index = 100
 material = SubResource("CanvasItemMaterial_bb2iq")
-layout_mode = 0
-offset_left = 3.0
-offset_top = 46.0
-offset_right = 206.0
-offset_bottom = 113.0
+offset_left = -97.0
+offset_top = -34.0
+offset_right = 106.0
+offset_bottom = 33.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 text = "You have Died"
 label_settings = SubResource("LabelSettings_bb2iq")
 horizontal_alignment = 1
 
-[node name="Restart_Button" type="Button" parent="Player/Camera2D/ColorRect"]
+[node name="Restart_Button" type="Button" parent="Player/Camera2D"]
 visible = false
 z_index = 100
 material = SubResource("CanvasItemMaterial_bb2iq")
-layout_mode = 0
-offset_left = 78.0
-offset_top = 85.0
-offset_right = 162.0
-offset_bottom = 116.0
+offset_left = -22.0
+offset_top = 5.0
+offset_right = 62.0
+offset_bottom = 36.0
 scale = Vector2(0.56000125, 0.56000125)
 text = "RETRY"
 
-[node name="Menu_Button" type="Button" parent="Player/Camera2D/ColorRect"]
+[node name="Menu_Button" type="Button" parent="Player/Camera2D"]
 visible = false
 z_index = 100
 material = SubResource("CanvasItemMaterial_bb2iq")
-layout_mode = 0
-offset_left = 78.0
-offset_top = 102.0
-offset_right = 162.0
-offset_bottom = 133.0
+offset_left = -22.0
+offset_top = 22.0
+offset_right = 62.0
+offset_bottom = 53.0
 scale = Vector2(0.56000125, 0.56000125)
 text = "MENU"
 
@@ -223,6 +329,6 @@ libraries = {
 
 [connection signal="update_camera" from="Player" to="Player/Camera2D" method="_on_player_update_camera"]
 [connection signal="update_money" from="Player" to="Player/Control/VSplitContainer/Label" method="_on_player_update_money"]
-[connection signal="pressed" from="Player/Camera2D/ColorRect/Restart_Button" to="Player/Camera2D" method="_on_restart_button_pressed"]
-[connection signal="pressed" from="Player/Camera2D/ColorRect/Menu_Button" to="Player/Camera2D" method="_on_menu_button_2_pressed"]
-[connection signal="pressed" from="Player/Camera2D/ColorRect/Menu_Button" to="Player/Camera2D" method="_on_menu_button_pressed"]
+[connection signal="pressed" from="Player/Camera2D/Restart_Button" to="Player/Camera2D" method="_on_restart_button_pressed"]
+[connection signal="pressed" from="Player/Camera2D/Menu_Button" to="Player/Camera2D" method="_on_menu_button_pressed"]
+[connection signal="pressed" from="Player/Camera2D/Menu_Button" to="Player/Camera2D" method="_on_menu_button_2_pressed"]

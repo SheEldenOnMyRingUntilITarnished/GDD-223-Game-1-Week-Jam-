@@ -36,11 +36,11 @@ var mining_range: int = 15
 var mining_fortune: float = 1.0
 
 #Light Stats
-var max_lamp_size: float = 1
-var lamp_decrease_speed: float = 0#0.1#0.0005
+var max_lamp_size: float = 0.15
+var lamp_decrease_speed: float = 1#0.0005
 
 #Camera Stats
-var max_camera_size: float = 1
+var max_camera_size: float = 7
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED_HIDDEN)
