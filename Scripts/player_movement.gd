@@ -30,7 +30,7 @@ var large_falling:bool = false
 var landed = false
 
 #Pickaxe Upgradable Stats
-var mining_speed: float = 0
+var mining_speed: float = 0.9
 var mining_range: int = 300
 var mining_fortune: float = 1.0
 
@@ -39,9 +39,10 @@ var max_lamp_size: float = 0.15
 var lamp_decrease_speed: float = 0.0005
 
 #Camera Stats
-var max_camera_size: float = 1
+var max_camera_size: float = 7
 
 func _ready() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED_HIDDEN)
 	Update_Pickaxe_Stats()
 	LightSource.scale.x = max_lamp_size
 	LightSource.scale.y = max_lamp_size
@@ -60,6 +61,10 @@ func _process(delta: float) -> void:
 	if !LightSource.scale.x < 0.000001 && !LightSource.scale.y < 0.000001 && !in_shop:
 		LightSource.scale.x -= lamp_decrease_speed * delta
 		LightSource.scale.y -= lamp_decrease_speed * delta
+	else:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		$"../AnimationPlayer".play("Fade_To_Black")
+		$AnimatedSprite2D/PointLight2D.position = get_global_mouse_position()
 	
 	if Input.is_action_just_pressed("Player_Interact"):
 		if in_shop:

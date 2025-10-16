@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://632ip3qy3hbl"]
+[gd_scene load_steps=16 format=3 uid="uid://632ip3qy3hbl"]
 
 [ext_resource type="Script" uid="uid://b3toqbb2vuqom" path="res://Scripts/main_game_system.gd" id="1_6j5ir"]
 [ext_resource type="PackedScene" uid="uid://gi2xish0ma2a" path="res://Scenes/cave_generator.tscn" id="1_l756w"]
@@ -6,6 +6,9 @@
 [ext_resource type="Script" uid="uid://xqb3l377u5ld" path="res://Scripts/ValueHolder.gd" id="3_0e3vx"]
 [ext_resource type="Script" uid="uid://c21c0y6aq15l3" path="res://Scripts/camera_controller.gd" id="4_mgc0q"]
 [ext_resource type="PackedScene" uid="uid://nxbppas5ve38" path="res://Prefabs/shop_prefab.tscn" id="6_bb2iq"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_bb2iq"]
+font_size = 23
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_0e3vx"]
 light_mode = 1
@@ -23,6 +26,7 @@ outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="Animation" id="Animation_0e3vx"]
 resource_name = "Fade_From_Black"
+length = 1.2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -42,10 +46,10 @@ tracks/1/path = NodePath("Player/Camera2D/ColorRect:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [true]
+"values": [true, false]
 }
 
 [sub_resource type="Animation" id="Animation_6j5ir"]
@@ -75,9 +79,37 @@ tracks/1/keys = {
 "values": [false]
 }
 
+[sub_resource type="Animation" id="Animation_bb2iq"]
+resource_name = "Fade_To_Black"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Player/Camera2D/ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.033333335, 0.96666664),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Player/Camera2D/ColorRect:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.033333335),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_6j5ir"]
 _data = {
 &"Fade_From_Black": SubResource("Animation_0e3vx"),
+&"Fade_To_Black": SubResource("Animation_bb2iq"),
 &"RESET": SubResource("Animation_6j5ir")
 }
 
@@ -102,6 +134,34 @@ offset_top = -80.0
 offset_right = 100.0
 offset_bottom = 120.0
 color = Color(0, 0, 0, 1)
+
+[node name="Label" type="Label" parent="Player/Camera2D/ColorRect"]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 46.0
+offset_right = 206.0
+offset_bottom = 113.0
+text = "You have Died"
+label_settings = SubResource("LabelSettings_bb2iq")
+horizontal_alignment = 1
+
+[node name="Restart_Button" type="Button" parent="Player/Camera2D/ColorRect"]
+layout_mode = 0
+offset_left = 78.0
+offset_top = 85.0
+offset_right = 162.0
+offset_bottom = 116.0
+scale = Vector2(0.56000125, 0.56000125)
+text = "RETRY"
+
+[node name="Menu_Button2" type="Button" parent="Player/Camera2D/ColorRect"]
+layout_mode = 0
+offset_left = 78.0
+offset_top = 102.0
+offset_right = 162.0
+offset_bottom = 133.0
+scale = Vector2(0.56000125, 0.56000125)
+text = "MENU"
 
 [node name="Shop" parent="Player/Camera2D" instance=ExtResource("6_bb2iq")]
 visible = false
@@ -151,3 +211,5 @@ libraries = {
 
 [connection signal="update_camera" from="Player" to="Player/Camera2D" method="_on_player_update_camera"]
 [connection signal="update_money" from="Player" to="Player/Control/VSplitContainer/Label" method="_on_player_update_money"]
+[connection signal="pressed" from="Player/Camera2D/ColorRect/Restart_Button" to="Player/Camera2D" method="_on_restart_button_pressed"]
+[connection signal="pressed" from="Player/Camera2D/ColorRect/Menu_Button2" to="Player/Camera2D" method="_on_menu_button_2_pressed"]

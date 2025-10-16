@@ -10,13 +10,13 @@ const DIAMOND_RARITY: float = 82
 #CAVE GENERATION---
 const WIDTH: float = 60
 const HEIGHT_OF_FALL_AREA: float = 300
-const AMOUNT_OF_SHOPS: float = 6
 const SHOP_HEIGHT: float = 12
-const HEIGHT_OF_CAVE: float = 1200
+const HEIGHT_OF_CAVE: float = 600
 const HEIGHT_OF_WIN_ROOM: float = 30
 const THICKNESS_OF_BORDERS: float = 12
 const CELL_SIZE: float = 10.0
 const CAVE_SMOOTHING: float = 4
+const CAVE_LAYERS = 9;
 
 #BLOCKS
 const BACKGROUND_BLOCK = preload("res://Prefabs/Blocks/background_block_prefab.tscn")
@@ -44,33 +44,34 @@ var grid = []
 #Runs all the functions to generate the level
 func _ready():
 	randomize()
-	initalize_grid()
+	initalize_grid(CAVE_LAYERS)
 	generate_cave()
 	draw_cave()
 
 #Creates the grid, assigning true and false to each point
-func initalize_grid():
-	for x in range(WIDTH):
-		grid.append([])
-		for y in range(HEIGHT_OF_FALL_AREA):
-			if(x < round(WIDTH/2 + 4) && x > round(WIDTH/2) - 4):
-				grid[x].append(false)
-			else:
-				grid[x].append(randf() > 0.45)
-		for y in range(HEIGHT_OF_CAVE - HEIGHT_OF_WIN_ROOM):
-			var shop_block = false
-			for i in AMOUNT_OF_SHOPS:
-				if y > HEIGHT_OF_CAVE/(i+1) && y < HEIGHT_OF_CAVE/(i+1) + SHOP_HEIGHT:
+func initalize_grid(loop: float):
+	for z in loop:
+		for x in range(WIDTH):
+			grid.append([])
+			for y in range(HEIGHT_OF_FALL_AREA):
+				if(x < round(WIDTH/2 + 4) && x > round(WIDTH/2) - 4):
 					grid[x].append(false)
-					shop_block = true
-				else: if y > HEIGHT_OF_CAVE/(i+1) - SHOP_HEIGHT/2 && y < HEIGHT_OF_CAVE/(i+1) + SHOP_HEIGHT + SHOP_HEIGHT/2:
-					grid[x].append(true)
-					shop_block = true
-			if shop_block == false:
-				grid[x].append(randf() > 0.45)
-			
-		for y in range(HEIGHT_OF_WIN_ROOM):
-			grid[x].append(true)
+				else:
+					grid[x].append(randf() > 0.45)
+			for y in range(HEIGHT_OF_CAVE*(loop/2) - HEIGHT_OF_WIN_ROOM):
+				var shop_block = false
+				#for i in AMOUNT_OF_SHOPS:
+				#	if y > HEIGHT_OF_CAVE/(i+1) && y < HEIGHT_OF_CAVE/(i+1) + SHOP_HEIGHT:
+				#		grid[x].append(false)
+				#		shop_block = true
+				#	else: if y > HEIGHT_OF_CAVE/(i+1) - SHOP_HEIGHT/2 && y < HEIGHT_OF_CAVE/(i+1) + SHOP_HEIGHT + SHOP_HEIGHT/2:
+				#		grid[x].append(true)
+				#		shop_block = true
+				if shop_block == false:
+					grid[x].append(randf() > 0.45)
+				
+			for y in range(HEIGHT_OF_WIN_ROOM):
+				grid[x].append(true)
 
 #Takes the random false points across the graph and enlargens them creating realistic erosion
 func generate_cave():
@@ -79,13 +80,13 @@ func generate_cave():
 		for x in range(WIDTH):
 			for y in range(HEIGHT_OF_CAVE):
 				var wall_count = count_neighboring_walls(x, y)
-				for s in AMOUNT_OF_SHOPS:
-					if y > HEIGHT_OF_CAVE/(s+1) - SHOP_HEIGHT/2 && y < HEIGHT_OF_CAVE/(s+1) + SHOP_HEIGHT + SHOP_HEIGHT/2:
-						pass
-					else: if grid[x][y]:
-						new_grid[x][y] = wall_count > 3
-					else:
-						new_grid[x][y] = wall_count > 4
+				#for s in AMOUNT_OF_SHOPS:
+					#if y > HEIGHT_OF_CAVE/(s+1) - SHOP_HEIGHT/2 && y < HEIGHT_OF_CAVE/(s+1) + SHOP_HEIGHT + SHOP_HEIGHT/2:
+					#	pass
+				if grid[x][y]:
+					new_grid[x][y] = wall_count > 3
+				else:
+					new_grid[x][y] = wall_count > 4
 		grid = new_grid
 
 #Counts the points that are true around a target point
@@ -128,22 +129,22 @@ func draw_cave():
 	for x in range(WIDTH):
 		for y in range(HEIGHT_OF_CAVE):
 			var cell = null
-			for i in AMOUNT_OF_SHOPS:
-					if y - HEIGHT_OF_FALL_AREA >= HEIGHT_OF_CAVE/(i+1) && y - HEIGHT_OF_FALL_AREA <= HEIGHT_OF_CAVE/(i+1) + 3 && (x < WIDTH/2 - 6 || x > WIDTH/2 + 6):
-						cell = BEDROCK_BLOCK.instantiate()
-						cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
-						add_child(cell)
-					else:if y - HEIGHT_OF_FALL_AREA >= HEIGHT_OF_CAVE/(i+1) + SHOP_HEIGHT && y - HEIGHT_OF_FALL_AREA <= HEIGHT_OF_CAVE/(i+1) + SHOP_HEIGHT + 3  && (x < WIDTH/2 - 6 || x > WIDTH/2 + 6):
-						cell = BEDROCK_BLOCK.instantiate()
-						cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
-						add_child(cell) 
-					else:if y - HEIGHT_OF_FALL_AREA == HEIGHT_OF_CAVE/(i+1) + SHOP_HEIGHT - 1 && x == WIDTH/3:
-						cell = BEDROCK_BLOCK.instantiate()#OIL REFILL
-						#cell.connect("interacted_with", $"../../Player")
-						cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
-						add_child(cell) 
-					else:
-						cell = null
+			#for i in AMOUNT_OF_SHOPS:
+			#		if y - HEIGHT_OF_FALL_AREA >= HEIGHT_OF_CAVE/(i+1) && y - HEIGHT_OF_FALL_AREA <= HEIGHT_OF_CAVE/(i+1) + 3 && (x < WIDTH/2 - 6 || x > WIDTH/2 + 6):
+			#			cell = BEDROCK_BLOCK.instantiate()
+			##			cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
+			#			add_child(cell)
+			##		else:if y - HEIGHT_OF_FALL_AREA >= HEIGHT_OF_CAVE/(i+1) + SHOP_HEIGHT && y - HEIGHT_OF_FALL_AREA <= HEIGHT_OF_CAVE/(i+1) + SHOP_HEIGHT + 3  && (x < WIDTH/2 - 6 || x > WIDTH/2 + 6):
+			#			cell = BEDROCK_BLOCK.instantiate()
+			##			cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
+				#		add_child(cell) 
+			#		else:if y - HEIGHT_OF_FALL_AREA == HEIGHT_OF_CAVE/(i+1) + SHOP_HEIGHT - 1 && x == WIDTH/3:
+			#			cell = BEDROCK_BLOCK.instantiate()#OIL REFILL
+			#			#cell.connect("interacted_with", $"../../Player")
+			#			cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
+			#			add_child(cell) 
+			#		else:
+			#			cell = null
 			if grid[x][y]:
 				if cell == null:
 					if(randf() * HEIGHT_OF_CAVE > (randf() * DIAMOND_RARITY + 1) * (HEIGHT_OF_CAVE - y)):
@@ -192,9 +193,9 @@ func draw_cave():
 					cell.position = Vector2(x * CELL_SIZE, y * CELL_SIZE)
 					add_child(cell) 
 				
-		if x == WIDTH/COUNT_OF_TORCHS * amount_of_torchs:
-			amount_of_torchs += 1
-			for i in AMOUNT_OF_SHOPS:
-				var torch = TORCH_BLOCK.instantiate()
-				torch.position = Vector2(x * CELL_SIZE, (((HEIGHT_OF_CAVE)/(i+1) + SHOP_HEIGHT/2) + HEIGHT_OF_FALL_AREA) * CELL_SIZE)
-				add_child(torch) 
+		#if x == WIDTH/COUNT_OF_TORCHS * amount_of_torchs:
+		#	amount_of_torchs += 1
+		#	for i in AMOUNT_OF_SHOPS:
+		#		var torch = TORCH_BLOCK.instantiate()
+		#		torch.position = Vector2(x * CELL_SIZE, (((HEIGHT_OF_CAVE)/(i+1) + SHOP_HEIGHT/2) + HEIGHT_OF_FALL_AREA) * CELL_SIZE)
+		#		add_child(torch) 
