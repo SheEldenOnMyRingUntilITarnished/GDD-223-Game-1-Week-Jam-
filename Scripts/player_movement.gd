@@ -22,7 +22,8 @@ signal update_money(value: int)
 signal update_camera(size: int)
 
 var value: int = 0
-var in_shop:bool = false
+var in_shop: bool = false
+var dead: bool = false
 
 #Animation stuff
 var falling:bool = false
@@ -31,15 +32,15 @@ var landed = false
 
 #Pickaxe Upgradable Stats
 var mining_speed: float = 0.9
-var mining_range: int = 300
+var mining_range: int = 15
 var mining_fortune: float = 1.0
 
 #Light Stats
-var max_lamp_size: float = 0.15
-var lamp_decrease_speed: float = 0.0005
+var max_lamp_size: float = 1
+var lamp_decrease_speed: float = 0#0.1#0.0005
 
 #Camera Stats
-var max_camera_size: float = 7
+var max_camera_size: float = 1
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED_HIDDEN)
@@ -51,6 +52,8 @@ func _ready() -> void:
 	falling = false
 	landed = true
 	
+	dead = false
+	
 	update_camera.emit(max_camera_size)
 	
 	GetUpTimer.start(5)
@@ -58,13 +61,17 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	
-	if !LightSource.scale.x < 0.000001 && !LightSource.scale.y < 0.000001 && !in_shop:
+	if !LightSource.scale.x < 0.000001 && !LightSource.scale.y < 0.000001 && !in_shop && !dead:
 		LightSource.scale.x -= lamp_decrease_speed * delta
 		LightSource.scale.y -= lamp_decrease_speed * delta
 	else:
+		if !dead && !in_shop:
+			$"../AnimationPlayer".play("Fade_To_Black")
+			dead = true
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		$"../AnimationPlayer".play("Fade_To_Black")
-		$AnimatedSprite2D/PointLight2D.position = get_global_mouse_position()
+		$AnimatedSprite2D/PointLight2D.global_position = get_global_mouse_position()
+		LightSource.scale.x = max_lamp_size
+		LightSource.scale.y = max_lamp_size
 	
 	if Input.is_action_just_pressed("Player_Interact"):
 		if in_shop:
@@ -94,6 +101,10 @@ func _process(delta: float) -> void:
 		MiningTimer.start()
 
 func _physics_process(delta: float) -> void:
+	if !dead && !in_shop:
+		Movement(delta)
+
+func Movement(delta: float) -> void:
 	var x_input: float = Input.get_action_strength("Player_Right") - Input.get_action_strength("Player_Left")
 	var velocity_weight: float = delta * (ACCELERATION if x_input else FRICTION)
 	if is_on_floor() && !landed:
