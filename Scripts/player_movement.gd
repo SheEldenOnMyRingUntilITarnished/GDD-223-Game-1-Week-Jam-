@@ -37,7 +37,7 @@ var mining_fortune: float = 1.0
 
 #Light Stats
 var max_lamp_size: float = 0.15
-var lamp_decrease_speed: float = 1#0.0005
+var lamp_decrease_speed: float = 0.0005
 
 #Camera Stats
 var max_camera_size: float = 7
@@ -65,11 +65,12 @@ func _process(delta: float) -> void:
 		LightSource.scale.x -= lamp_decrease_speed * delta
 		LightSource.scale.y -= lamp_decrease_speed * delta
 	else:
+		if dead:
+			get_tree().change_scene_to_file("res://Scenes/death_screen.tscn")
 		if !dead && !in_shop:
 			$"../AnimationPlayer".play("Fade_To_Black")
 			dead = true
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		$AnimatedSprite2D/PointLight2D.global_position = get_global_mouse_position()
 		LightSource.scale.x = max_lamp_size
 		LightSource.scale.y = max_lamp_size
 	
